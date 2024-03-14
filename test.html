@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Form</title>
+</head>
+<body>
+<h2>Web Form</h2>
+<form id="myForm" action="/validate" method="POST">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="age">Age:</label><br>
+    <input type="number" id="age" name="age" required><br><br>
+
+    <label for="dob">Date of Birth:</label><br>
+    <input type="date" id="dob" name="dob" required><br><br>
+
+    <input type="submit" value="Submit">
+</form>
+
+<div id="errorMessages"></div>
+
+<script>
+document.getElementById("myForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    var formData = new FormData(this);
+
+    fetch('/validate', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            document.getElementById("errorMessages").innerHTML = '<p style="color: red;">' + data.error + '</p>';
+        } else {
+            document.getElementById("errorMessages").innerHTML = '<p style="color: green;">' + data.success + '</p>';
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+</script>
+</body>
+</html>
+
